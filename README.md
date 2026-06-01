@@ -23,8 +23,9 @@ Implementation of various data structures in C.
 
 
 
-|initialize|O(1)|
+|Function|Complexity|
 |-|-|
+|initialize|O(1)|
 |is\_empty|O(1)|
 |insert\_beginning|O(1)|
 |insert\_end|O(n)|
