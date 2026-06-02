@@ -8,12 +8,12 @@ Returns NULL if fails.
 O(1)
 */
 Node *Node_initialize(int value) {
-    Node *new_node = malloc(sizeof(Node));
-    if (new_node != NULL) {
-        new_node->data = value;
-        new_node->next = NULL;
+    Node *node = malloc(sizeof(Node));
+    if (node != NULL) {
+        node->data = value;
+        node->next = NULL;
     }
-    return new_node;
+    return node;
 }
 
 LinkedList *LinkedList_initialize() {
@@ -35,71 +35,69 @@ Returns NULL if fails.
 O(n)
 */
 Node *LinkedList_find_node_headed(LinkedList *l, int index) {
-    Node *current = l->head;
+    Node *node = l->head;
     int i = -1;
-    while (current != NULL) {
+    while (node != NULL) {
         if (i == index) {
             break;
         }
-        current = current->next;
+        node = node->next;
         i++;
     }
-    return current;
+    return node;
 }
 
 /*
 Returns the Node of the LinkedList at the given index.
 Returns the Node of the reversed LinkedList at -(index + 1) if index < 0.
-Returns the head if index is -(length + 1).
+Returns the head if index is -(size + 1).
 Returns NULL if fails.
 O(n)
 */
 Node *LinkedList_find_node(LinkedList *l, int index) {
     if (index >= 0) {
-        Node *current = l->head;
+        Node *node = l->head;
         int i = -1;
-        while (current != NULL) {
+        while (node != NULL) {
             if (i == index) {
                 break;
             }
-            current = current->next;
+            node = node->next;
             i++;
         }
-        return current;
-    } else {
+        return node;
+    } else { // Access the list backwards if index < 0
         Node *result = l->head;
-        Node *current = l->head;
+        Node *node = l->head;
         for (int i = 0; i < -index; i++) {
-            if (current->next == NULL) return NULL;
-            current = current->next;
+            if (node->next == NULL) return NULL;
+            node = node->next;
         }
-        while (current != NULL) {
-            current = current->next;
+        while (node != NULL) {
+            node = node->next;
             result = result->next;
         }
         return result;
     }
 } /* Equivalent but faster than:
 Node *LinkedList_find_node(LinkedList *l, int index) {
-    // Add the length to negative indices so that they access the list backwards
+    // Add the size to negative indices so that they access the list backwards
     if (index < 0) {
-        index += LinkedList_length(l);
-        if (index < 0) {
-            return NULL;
-        }
+        index += LinkedList_size(l);
+        if (index < 0) return NULL;
     }
 
     // Find the node and return NULL if the index is too big
-    Node *current = l->head;
+    Node *node = l->head;
     int i = -1;
-    while (current != NULL) {
+    while (node != NULL) {
         if (i == index) {
             break;
         }
-        current = current->next;
+        node = node->next;
         i++;
     }
-    return current;
+    return node;
 } */
 
 int LinkedList_is_empty(LinkedList *l) {
@@ -178,39 +176,40 @@ int LinkedList_remove_at(LinkedList *l, int index, int *value) {
 
     prev_node->next = removed->next;
     free(removed);
-    
+
     return 1;
 }
 
 int LinkedList_remove_value(LinkedList *l, int value, int *index) {
-    Node *current = l->head;
+    Node *node = l->head;
     int i = 0;
-    while (current->next != NULL) {
-        if (current->next->data == value) {
-            Node *removed = current->next;
+    while (node->next != NULL) {
+        if (node->next->data == value) {
+            Node *removed = node->next;
             *index = i;
 
-            current->next = removed->next;
+            node->next = removed->next;
             free(removed);
 
             return 1;
         }
-        current = current->next;
+
+        node = node->next;
         i++;
     }
 
     return 0;
 }
 
-int LinkedList_length(LinkedList *l) {
-    Node *current = l->head->next;
-    int length = 0;
-    while (current != NULL) {
-        current = current->next;
-        length++;
+int LinkedList_size(LinkedList *l) {
+    Node *node = l->head->next;
+    int size = 0;
+    while (node != NULL) {
+        node = node->next;
+        size++;
     }
 
-    return length;
+    return size;
 }
 
 int LinkedList_get(LinkedList *l, int index, int *value) {
@@ -230,49 +229,49 @@ int LinkedList_set(LinkedList *l, int index, int value) {
 }
 
 int LinkedList_index(LinkedList *l, int value, int *index) {
-    Node *current = l->head->next;
+    Node *node = l->head->next;
     int i = 0;
-    while (current != NULL) {
-        if (current->data == value) {
+    while (node != NULL) {
+        if (node->data == value) {
             *index = i;
             return 1;
         }
-        current = current->next;
+        node = node->next;
         i++;
     }
     return 0;
 }
 
 int LinkedList_contains(LinkedList *l, int value) {
-    Node *current = l->head->next;
-    while (current != NULL) {
-        if (current->data == value) {
+    Node *node = l->head->next;
+    while (node != NULL) {
+        if (node->data == value) {
             return 1;
         }
-        current = current->next;
+        node = node->next;
     }
 
     return 0;
 }
 
 int LinkedList_count(LinkedList *l, int value) {
-    Node *current = l->head->next;
+    Node *node = l->head->next;
     int count = 0;
-    while (current != NULL) {
-        if (current->data == value) {
+    while (node != NULL) {
+        if (node->data == value) {
             count++;
         }
-        current = current->next;
+        node = node->next;
     }
 
     return count;
 }
 
 void LinkedList_clear(LinkedList *l) {
-    Node *current = l->head->next;
-    while (current != NULL) {
-        Node *removed = current;
-        current = current->next;
+    Node *node = l->head->next;
+    while (node != NULL) {
+        Node *removed = node;
+        node = node->next;
         free(removed);
     }
     l->head->next = NULL;
@@ -281,22 +280,23 @@ void LinkedList_clear(LinkedList *l) {
 int LinkedList_extend(LinkedList *l, LinkedList *other) {
     Node *last = LinkedList_find_node_headed(l, -1);
     Node *original_last = last;
-    Node *current = other->head->next;
-    while (current != NULL) {
-        Node *new = Node_initialize(current->data);
+    Node *node = other->head->next;
+    while (node != NULL) {
+        Node *new = Node_initialize(node->data);
         if (new == NULL) { // If fails to initialize a new node, remove all added nodes.
-            current = original_last->next;
-            while (current != NULL) {
-                Node *removed = current;
-                current = current->next;
+            node = original_last->next;
+            while (node != NULL) {
+                Node *removed = node;
+                node = node->next;
                 free(removed);
             }
             original_last->next = NULL;
+
             return 0;
         }
         last->next = new;
 
-        current = current->next;
+        node = node->next;
         last = last->next;
     }
     return 1;
@@ -305,7 +305,6 @@ int LinkedList_extend(LinkedList *l, LinkedList *other) {
 void LinkedList_combine(LinkedList *l, LinkedList *other) {
     LinkedList_find_node_headed(l, -1)->next = other->head->next;
 
-    LinkedList_clear(other);
     free(other);
 }
 
@@ -313,19 +312,19 @@ LinkedList *LinkedList_copy(LinkedList *l) {
     LinkedList *copy = LinkedList_initialize();
     if (copy == NULL) return NULL;
 
-    Node *current_copy = copy->head;
-    Node *current = l->head->next;
-    while (current != NULL) {
-        Node *new = Node_initialize(current->data);
+    Node *node_copy = copy->head;
+    Node *node = l->head->next;
+    while (node != NULL) {
+        Node *new = Node_initialize(node->data);
         if (new == NULL) {
             LinkedList_clear(copy);
             free(copy);
             return NULL;
         }
-        current_copy->next = new;
+        node_copy->next = new;
 
-        current_copy = current_copy->next;
-        current = current->next;
+        node_copy = node_copy->next;
+        node = node->next;
     }
 
     return copy;
@@ -334,12 +333,17 @@ LinkedList *LinkedList_copy(LinkedList *l) {
 void LinkedList_print(LinkedList *l) {
     printf("[");
     if (!LinkedList_is_empty(l)) {
-        Node *current = l->head->next;
-        while (current->next != NULL) {
-            printf("%d, ", current->data);
-            current = current->next;
+        Node *node = l->head->next;
+        while (node->next != NULL) {
+            printf("%d, ", node->data);
+            node = node->next;
         }
-        printf("%d", current->data);
+        printf("%d", node->data);
     }
     printf("]");
+}
+
+void LinkedList_free(LinkedList *l) {
+    LinkedList_clear(l);
+    free(l);
 }

@@ -78,10 +78,10 @@ O(n)
 int LinkedList_remove_value(LinkedList *l, int value, int *index);
 
 /*
-Returns the length of the LinkedList.
+Returns the size of the LinkedList.
 O(n)
 */
-int LinkedList_length(LinkedList *l);
+int LinkedList_size(LinkedList *l);
 
 /*
 Assigns the value at the given index of the LinkedList to the parameter value.
@@ -151,6 +151,12 @@ O(n)
 void LinkedList_print(LinkedList *l);
 
 /*
+Frees the LinkedList.
+O(n)
+*/
+void LinkedList_free(LinkedList *l);
+
+/*
 Functions and their complixities:
 - LinkedList_initialize       - O(1)
 - LinkedList_is_empty         - O(1)
@@ -161,7 +167,7 @@ Functions and their complixities:
 - LinkedList_remove_end       - O(n)
 - LinkedList_remove_at        - O(n)
 - LinkedList_remove_value     - O(n)
-- LinkedList_length           - O(n)
+- LinkedList_size             - O(n)
 - LinkedList_get              - O(n)
 - LinkedList_set              - O(n)
 - LinkedList_index            - O(n)
@@ -172,10 +178,11 @@ Functions and their complixities:
 - LinkedList_combine          - O(n)
 - LinkedList_copy             - O(n)
 - LinkedList_print            - O(n)
+- LinkedList_free             - O(n)
 
 More generally:
 - is_empty - O(1)
-- length   - O(n)
+- size     - O(n)
 - insert   - O(n)
 - remove   - O(n)
 - search   - O(n)
